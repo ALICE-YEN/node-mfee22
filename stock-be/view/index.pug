@@ -1,0 +1,11 @@
+extends _layouts/master
+
+block content
+  img(src="/images/test.png", alt="這是圖片")
+  #main
+    ul.list-style.color-green
+      each val in stocks
+        li.list-item 股票名稱 #{val}
+    //- 從後端傳資料來前端
+
+    //- 複習2022.2.16

@@ -1,4 +1,4 @@
-// Promise版
+// Promise版，自己包
 const { readFile } = require("fs");
 
 // readFile非同步函式，丟給外包

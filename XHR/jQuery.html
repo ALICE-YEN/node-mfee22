@@ -1,0 +1,32 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>jQuery</title>
+  </head>
+  <body>
+    <button id="asyncBtn">非同步</button>
+    <div id="response">message</div>
+    <!-- jQuery cdn -->
+    <!-- integrity: 如果駭客偷把cdn換成漏洞，檔案hash雜湊，如果偷改內容hash就會不一樣，瀏覽器就不會執行此檔案，和加密不同。 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script>
+      var responseDom = document.getElementById("response");
+
+      var asyncBtn = document.getElementById("asyncBtn");
+      asyncBtn.addEventListener("click", function () {
+        responseDom.innerText = "開始「非」同步請求";
+        $.ajax("http://34.221.173.92:3000/data", {method: "GET"}) // Promise interface
+        .done((order) => {
+          console.log(order);
+        })
+        .fail((xhr, status) => {
+          console.error(`發生錯誤 ${status}`);
+        });
+      });
+      
+    </script>
+  </body>
+</html>
+
+<!-- 複習2022.1.21 -->

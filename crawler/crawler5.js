@@ -5,7 +5,6 @@ const mysql = require("mysql2");
 require("dotenv").config();
 
 (async () => {
-
   let connection = mysql.createConnection({
     host: process.env.DB_HOST, //127.0.0.1
     port: process.env.DB_PORT,
@@ -26,7 +25,8 @@ require("dotenv").config();
         },
       }
     );
-    console.log(queryStockName.date);
+    // console.log(queryStockName.date);
+
     // input輸入推薦
     if (
       !queryStockName.data.suggestions ||
@@ -42,11 +42,12 @@ require("dotenv").config();
     //  駭客攻擊 SQL injection：有非常多變形，最簡易的是禁止有''、""、``。
     // let saveNameResult = await connection.execute("INSERT INTO stocks (id, name) VALUES ()); 老師最開始有錯誤示範 沒抄到
     // prepared statement 預防SQL injection
+    // 不能重複加同公司，IGNORE嚷我們可以重複測試
     let saveNameResult = await connection.execute(
-      "INSERT INTO stocks (id, name) VALUES (?, ?)",
+      "INSERT IGNORE INTO stocks (id, name) VALUES (?, ?)",
       [stockNo, stockName]
     );
-    console.log(saveNameResult);
+    // console.log(saveNameResult);
 
     // let queryDate = "20220114";
     // 老師在此有看不同同學的解法，記得看影片補上！
@@ -60,11 +61,35 @@ require("dotenv").config();
         params: {
           response: "json",
           date: queryDate,
-          stockNo,
+          stockNo, // 實務上可以存.env，不一定要另外存txt(不會誤改設定)
         },
       }
     );
-    // console.log(response.data);
+    // 處理資料
+    let processedData = response.data.data.map((d) => {
+      // 處理日期：民國轉西元，/轉-
+      let dateArr = d[0].split("/");
+      dateArr[0] = Number(dateArr[0] + 1911);
+      d[0] = dateArr.join("-");
+      // 處理千分位
+      d = d.map((value) => {
+        return value.replace(/[,]+/g,"");
+      });
+      d.unshift(stockNo);
+      return d;
+    });
+    console.log(processedData);
+
+    // 把整理好的資料存進資料庫
+    // 套件mysql2有個雷是，但又有支援Promise。套件mysql沒此雷，但不支援Promise。
+    // connection.execute -> 處理bulk insert的prepare statement會有點小問題
+    // connection.execute -> 回傳的是Promise，可以被await
+    // connection.query -> 回傳的不是Promise，不能被await
+    let savePriceResult = await connection.promise().query(
+      "INSERT IGNORE INTO stock_prices (stock_id, date, volume, amount, open_price, high_price, low_price, close_price, delta_price, transactions) VALUES ?", [processedData]
+    );
+    console.log(savePriceResult);
+
   } catch (err) {
     console.error(err);
   }

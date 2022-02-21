@@ -1,0 +1,8 @@
+extends _layouts/master
+
+block content
+  img(src="/images/test.png", alt="這是圖片")
+  #main
+    ul.list-style.color-green
+      each val in [1, 2, 3, 4, 5]
+        li.list-item(class="item-" + (val%2)) 項目 #{val}

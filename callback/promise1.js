@@ -50,7 +50,7 @@ doWork("刷牙", 2000)
     console.log(`${result} at ${dt.toISOString()}`);
   })
   .catch((err) => {
-    // 處理錯誤
+    // 處理錯誤，只會抓前面的
     console.error(err);
   });
 // Promise不會像callback hell多層，效果一樣，但在同一層。

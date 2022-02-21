@@ -1,4 +1,5 @@
 // promise axios.get 證交所資料
+// 先安裝npm i axios，後引用require
 
 const axios = require("axios");
 

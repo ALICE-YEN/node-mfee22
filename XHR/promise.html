@@ -1,0 +1,52 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>XHR</title>
+  </head>
+  <body>
+    <button id="asyncBtn">非同步</button>
+    <button id="countBtn">測試按鈕</button>
+    <div id="count">0</div>
+    <div id="response">message</div>
+
+    <script>
+      var responseDom = document.getElementById("response");
+
+      function xhrPromise() {
+        return new Promise((resolve, reject) => {
+          var xhr = new XMLHttpRequest();
+          // xhr.addEventListener("load", function () {});
+          xhr.onload = function () {
+            resolve(xhr.responseText);
+          };
+          xhr.onerror = function () {
+            reject(`非同步的請求發生錯誤`);
+          };
+          // open(method, url, async = true)
+          // async 是 true => 表示是要用非同步的方式進行
+          xhr.open("GET", "http://34.221.173.92:3000/", true); // 老師示範建立的http
+          xhr.send();
+        });
+      }
+
+      var asyncBtn = document.getElementById("asyncBtn");
+      asyncBtn.addEventListener("click", function () {
+        responseDom.innerText = "開始「非」同步請求";
+        let p = xhrPromise();
+        p.then((result) => {
+          responseDom.innerText = `非同步請求回覆: ${result}`;
+        }).catch((err) => {
+          responseDom.innerText = err;
+        });
+      });
+
+      var count = document.getElementById("count");
+      var countBtn = document.getElementById("countBtn");
+      countBtn.addEventListener("click", function () {
+        count.innerText = parseInt(count.innerText, 10) + 1;
+      });
+    </script>
+  </body>
+</html>
+
+<!-- 複習2022.1.21 -->
