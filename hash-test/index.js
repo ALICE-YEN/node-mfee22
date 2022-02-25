@@ -1,11 +1,14 @@
+// 密碼雜湊函式
 // md5
+// npm i md5
 const md5 = require("md5");
 console.log(md5("test1234"));
 console.log(md5("test1234"));
 // 不同次跑結果一樣，不同電腦跑結果一樣
 // 查表法可暴力破解
 
-// bcrypt
+// bcrypt，比較新，有promise版
+// npm i bcrypt
 const bcrypt = require("bcrypt");
 (async () => {
     let result1 = await bcrypt.hash("test1234", 10);
@@ -16,8 +19,10 @@ const bcrypt = require("bcrypt");
     console.log("bcrypt 長:" result3);
 })
 // 每次跑得結果不一樣
+// 不管密碼長度，hash結果的長度一樣，欄位要預留足夠長度，可設定位數
 
 // argon2
+// npm i argon2
 const argon2 = require("argon2");
 (async () => {
     let result1 = await argon2.hash("test1234", 10);
@@ -27,5 +32,8 @@ const argon2 = require("argon2");
     let result3 = await argon2.hash("test123456789mfee22", 10);
     console.log("argon2 長:" result3);
 })
+// 每次跑得結果不一樣
 // 更複雜、速度還比bcrypt快
-// 不管密碼長度，hash結果的長度一樣，欄位要預留足夠長度
+// 不管密碼長度，hash結果的長度一樣，欄位要預留足夠長度，可設定位數
+
+// 複習2022.2.25

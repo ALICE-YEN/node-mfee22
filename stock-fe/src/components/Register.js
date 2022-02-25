@@ -9,29 +9,35 @@ const Register = () => {
   const [member, setMember] = useState({
     email: "gp4@gmail.com", // 看React底層
     name: "alice",
-    password: "123",
-    confirmPassword: "123",
+    password: "123123123",
+    confirmPassword: "123123123",
     photo: "",
   });
 
   function handleChange(e){
+    // 物件裡要用變數當key值，要用[]
+    // e.target.name是抓input的name (因為使用name當key值，所以name要和物件裡的key值一樣)，屬於html
       setMember({...member, [e.target.name]: e.target.value})
   };
 
+  // 按下註冊按鈕，就要送資料到後端
   async function handleSubmit(e){
-    // 關掉按下去會重整頁面的預設
+    // 阻止按下去會重整頁面的預設行為。現在單頁式，不換頁
     e.preventDefault();
     try{
       // 方法1：沒有上傳圖片
-      // let response = await axios.post(`${API_URL}/auth/register`, member);
-      // console.log(response.data); // response是axios回傳的物件
+      // response是axios回傳的物件，把回存資料放進response物件的data屬性
+      // http://localhost:3002/api/auth/register
+      // member本身就是物件，所以可以直接放
+      let response = await axios.post(`${API_URL}/auth/register`, member);
+      console.log(response.data);
       // 方法2：有上傳圖片要用formData
-      let formData = new FormData();
-      formData.append("email", member.email);
-      formData.append("name", member.name);
-      formData.append("password", member.password);
-      formData.append("confirmPassword", member.confirmPassword);
-      formData.append("photo", member.photo);
+      // let formData = new FormData();
+      // formData.append("email", member.email);
+      // formData.append("name", member.name);
+      // formData.append("password", member.password);
+      // formData.append("confirmPassword", member.confirmPassword);
+      // formData.append("photo", member.photo);
     } catch(e) {
       // console.error("error", e.response.data);
       console.error("測試註冊", ERR_MSG[e.response.data.code]);

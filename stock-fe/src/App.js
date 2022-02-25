@@ -17,8 +17,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         {/* :意思是後面有參數，沒有寫死 */}
-        <Route path="/stock/:stockId" element={<StockDetails />}>
         {/* react-router-dom: 6.2.1 有新寫法 */}
+        <Route path="/stock/:stockId" element={<StockDetails />}>
           <Route path=":currentPage" element={<StockDetails />} />
         </Route>
         <Route path="*" element={<NotFound />} />

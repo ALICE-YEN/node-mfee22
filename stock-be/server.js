@@ -28,10 +28,11 @@ let app = express();
 // 使用第三方開發的 cors 中間件，下述是最簡單的任何網址的請求都同意，可以再設定更嚴格的條件
 app.use(cors());
 
-// express.urlencoded要讓express認得body裡的資料
-// extended: false -> querystring
-// extend: true -> qs
+// 自行加內建中間件，express.urlencoded要讓express認得body裡的資料，不然body會undefined
+// extended: false -> querystring套件
+// extend: true -> qs套件
 app.use(express.urlencoded({extended: true}));
+// express.json內建中間件，要讓express認得json
 app.use(express.json());
 
 // 設定 express 要用的樣版引擎(template engine)
@@ -114,8 +115,8 @@ app.use("/api/stock", stockRouter);
 // let memberRouter = require("./routers/member");
 // app.use("/api/member", memberRouter);
 
-// let authRouter = require("./routers/auth");
-// app.use("/api/auth", authRouter);
+let authRouter = require("./routers/auth");
+app.use("/api/auth", authRouter);
 
 // 在所有路由中間件的後面，是一般中間件
 // 既然前面都比對不到，那表示這裡是 404
